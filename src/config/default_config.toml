@@ -1,0 +1,3 @@
+[database]
+# The location of the SQLite database
+url = ".cirrus/data.sqlite"
