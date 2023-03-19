@@ -1,6 +1,7 @@
 [package]
 name = "cirrus"
 version = "0.1.0"
+authors = ["Niklas Elsbrock"]
 edition = "2021"
 description = "A simple file cloud server with support for users and file shares"
 repository = "https://github.com/nelsbrock/cirrus"
@@ -17,6 +18,8 @@ diesel_migrations = "2.0.0"
 env_logger = "0.10.0"
 getset = "0.1.2"
 log = "0.4.17"
+rpassword = "7.2.0"
+scrypt = "0.11.0"
 serde = { version = "1.0.153", features = ["derive"] }
 tokio = { version = "1.26.0", features = ["full"]}
 toml = "0.7.2"

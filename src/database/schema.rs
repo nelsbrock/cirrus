@@ -11,7 +11,7 @@ diesel::table! {
 diesel::table! {
     users (name) {
         name -> Text,
-        password_hash -> Nullable<Text>,
+        password_hash -> Text,
     }
 }
 

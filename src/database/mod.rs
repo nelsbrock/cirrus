@@ -32,4 +32,8 @@ impl Database {
 
         Ok(Self::new(connection))
     }
+
+    pub fn conn(&mut self) -> &mut SqliteConnection {
+        &mut self.conn
+    }
 }

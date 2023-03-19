@@ -1,6 +1,6 @@
 CREATE TABLE users (
     name TEXT PRIMARY KEY NOT NULL,
-    password_hash TEXT
+    password_hash TEXT NOT NULL
 );
 
 CREATE TABLE public_shares (

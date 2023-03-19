@@ -25,15 +25,16 @@ pub struct Database {
 }
 
 impl Config {
-    fn read_from_path_or_default_paths(path: Option<&Path>) -> Option<io::Result<String>> {
+    fn read_from_path_or_default_paths(path: Option<&Path>) -> io::Result<String> {
         match path {
             None => DEFAULT_CONFIG_PATHS
                 .iter()
                 .find_map(|&path| match fs::read_to_string(path) {
                     Err(err) if err.kind() == ErrorKind::NotFound => None,
                     other => Some(other),
-                }),
-            Some(path) => Some(fs::read_to_string(path)),
+                })
+                .unwrap_or(Err(ErrorKind::NotFound.into())),
+            Some(path) => fs::read_to_string(path),
         }
     }
 
@@ -52,9 +53,8 @@ impl Config {
     /// - the configuration file is invalid.
     pub fn parse(path: Option<&Path>) -> anyhow::Result<Config> {
         let file_contents = match Self::read_from_path_or_default_paths(path) {
-            None => return Err(anyhow!("The configuration file could not be found.")),
-            Some(Err(err)) => return Err(anyhow!("Unable to read configuration file: {err}")),
-            Some(Ok(file)) => file,
+            Err(err) => return Err(anyhow!("Unable to read configuration file: {err}")),
+            Ok(file) => file,
         };
 
         match toml::from_str(&file_contents) {
@@ -79,7 +79,7 @@ impl Config {
         let result = OpenOptions::new()
             .write(true)
             .create(true)
-            .create_new(!overwrite.unwrap_or(true))
+            .create_new(!(overwrite.unwrap_or(false)))
             .open(path)
             .and_then(|mut file| file.write_all(include_bytes!("default_config.toml")));
 
